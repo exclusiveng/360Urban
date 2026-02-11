@@ -21,22 +21,24 @@ export default function FeaturedSection() {
           className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-10 gap-4"
         >
           <div>
-            <span className="text-primary text-sm font-semibold uppercase tracking-wider mb-2 block">
+            <span className="text-primary text-sm font-semibold uppercase tracking-wider mb-3 block">
               Featured
             </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-charcoal">
+            <h2 className="text-2xl md:text-3xl font-bold text-charcoal mb-3">
               Hand-Picked Properties
             </h2>
-            <p className="text-gray-text mt-2 max-w-lg">
+            <div className="w-12 h-[3px] bg-primary rounded-full mb-3" />
+            <p className="text-gray-text max-w-lg">
               Our top verified listings — inspected, confirmed, and ready for
               you.
             </p>
           </div>
           <Link
             to="/listings"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary-dark no-underline transition-colors shrink-0"
+            className="group inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-dark no-underline transition-colors shrink-0"
           >
-            View all listings <ArrowRight className="w-4 h-4" />
+            View all listings
+            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
           </Link>
         </motion.div>
 

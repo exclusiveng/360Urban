@@ -25,7 +25,7 @@ export default function HomePage() {
   return (
     <>
       <SEO
-        title="360Urban — Verified Properties in Abuja"
+        title="360Urban Verified Properties in Abuja"
         description="Find verified houses, flats, duplexes, and land in Abuja. Area-based property listings with no agent stress."
         jsonLd={jsonLd}
       />

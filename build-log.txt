@@ -1,0 +1,60 @@
+﻿
+> 360urban@0.0.0 build
+> vite build
+
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+node.exe : Found 1 
+warning while 
+optimizing generated 
+CSS:
+At line:1 char:1
++ & "C:\Program Files
+\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Found 1   
+  warning... gene    
+rated CSS::Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+
+[2mΓöé   }[22m
+[2mΓöé }[22m
+[2mΓöé[22m @import 
+url('https://fonts.go
+ogleapis.com/css2?fam
+ily=Inter:wght@300;40
+0;500;600;700;800&dis
+play=swap');
+[2mΓöå[22m        
+[33m[2m^--[22m 
+@import rules must 
+precede all rules 
+aside from @charset 
+and @layer 
+statements[39m
+[2mΓöå[22m
+[2mΓöé @keyframes 
+pulse-dot {[22m
+[2mΓöé   0%, 100% 
+{[22m
+
+[32mΓ£ô[39m 2144 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.71 kB[22m[1m[22m[2m Γöé gzip:   0.42 kB[22m
+[2mdist/[22m[35massets/index-_Pq417xR.css  [39m[1m[2m 37.85 kB[22m[1m[22m[2m Γöé gzip:   7.28 kB[22m
+[2mdist/[22m[36massets/index-BDmod0kQ.js   [39m[1m[2m426.35 kB[22m[1m[22m[2m Γöé gzip: 133.50 kB[22m
+[32mΓ£ô built in 20.75s[39m

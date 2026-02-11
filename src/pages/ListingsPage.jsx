@@ -19,7 +19,7 @@ export default function ListingsPage() {
     <>
       <SEO
         title="All Property Listings in Abuja"
-        description="Browse all verified property listings in Abuja — houses, flats, duplexes, and land for rent and sale."
+        description="Browse all verified property listings in Abuja houses, flats, duplexes, and land for rent and sale."
       />
 
       {/* Header */}

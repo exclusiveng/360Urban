@@ -1,22 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
   /* Colors */
-  --color-primary: #d4a017;
-  --color-primary-dark: #b8860b;
-  --color-primary-light: #f5e6b8;
-  --color-secondary: #ffffff;
-  --color-charcoal: #2b2b2b;
-  --color-charcoal-light: #3d3d3d;
-  --color-gray-light: #f7f7f5;
-  --color-gray-mid: #e0e0e0;
-  --color-gray-text: #6b6b6b;
-  --color-success: #2e7d32;
-  --color-error: #c62828;
-  --color-whatsapp: #25d366;
+  --color-primary: #D4A017;
+  --color-primary-dark: #B8860B;
+  --color-primary-light: #F5E6B8;
+  --color-secondary: #FFFFFF;
+  --color-charcoal: #2B2B2B;
+  --color-charcoal-light: #3D3D3D;
+  --color-gray-light: #F7F7F5;
+  --color-gray-mid: #E0E0E0;
+  --color-gray-text: #6B6B6B;
+  --color-success: #2E7D32;
+  --color-error: #C62828;
+  --color-whatsapp: #25D366;
 
   /* Font family */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Font sizes */
   --text-display: 3.5rem;
@@ -33,10 +34,33 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
+
+  /* Custom animation tokens */
+  --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s ease-in-out infinite;
 }
 
-/* Google Fonts import */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+/* Keyframe animations */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.8); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /* Base resets */
 * {
@@ -61,17 +85,59 @@ body {
 /* Utility classes */
 .container-main {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 @media (min-width: 768px) {
   .container-main {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
+}
+
+/* Golden accent underline */
+.golden-underline {
+  position: relative;
+  display: inline-block;
+}
+.golden-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+}
+
+/* Card lift effect */
+.card-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.12), 0 4px 8px -2px rgba(212, 160, 23, 0.08);
+}
+
+/* Select wrapper with custom chevron */
+.select-styled {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6B6B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.5rem;
+}
+
+/* Section divider */
+.section-divider {
+  width: 48px;
+  height: 3px;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+  margin-bottom: 1rem;
 }
 
 /* Scrollbar styling */
@@ -90,4 +156,19 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-gray-text);
+}
+
+/* Image skeleton loading */
+.img-skeleton {
+  background-color: var(--color-gray-light);
+  position: relative;
+  overflow: hidden;
+}
+.img-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-gray-mid);
+  opacity: 0.3;
+  animation: shimmer 2s ease-in-out infinite;
 }
