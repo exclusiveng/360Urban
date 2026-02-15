@@ -1,49 +1,73 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { getFeaturedProperties } from "../../data/properties";
+import { propertyService } from "../../services/propertyService";
 import PropertyCard from "../ui/PropertyCard";
 
 export default function FeaturedSection() {
-  const featured = getFeaturedProperties();
+  const [featured, setFeatured] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      setLoading(true);
+      const result = await propertyService.getFeaturedProperties(6);
+      if (result.success) {
+        setFeatured(result.data);
+      }
+      setLoading(false);
+    };
+
+    fetchFeatured();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 md:py-28 bg-gray-light">
+        <div className="container-main">
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   if (featured.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-24 bg-gray-light">
+    <section className="py-20 md:py-28 bg-gray-light">
       <div className="container-main">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-10 gap-4"
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4"
         >
           <div>
-            <span className="text-primary text-sm font-semibold uppercase tracking-wider mb-3 block">
-              Featured
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-charcoal mb-3">
-              Hand-Picked Properties
+            <p className="text-primary text-sm font-semibold mb-2">Featured</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal tracking-tight">
+              Hand-picked properties
             </h2>
-            <div className="w-12 h-[3px] bg-primary rounded-full mb-3" />
-            <p className="text-gray-text max-w-lg">
+            <p className="text-gray-500 mt-2 max-w-md">
               Our top verified listings — inspected, confirmed, and ready for
               you.
             </p>
           </div>
           <Link
             to="/listings"
-            className="group inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-dark no-underline transition-colors shrink-0"
+            className="group inline-flex items-center gap-2 text-sm font-semibold text-charcoal hover:text-primary no-underline transition-colors"
           >
             View all listings
-            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {featured.map((property, i) => (
             <PropertyCard key={property.id} property={property} index={i} />
           ))}

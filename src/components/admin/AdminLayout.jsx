@@ -9,11 +9,16 @@ import {
   X,
   MapPin,
   Settings,
+  Layers,
+  Home,
 } from "lucide-react";
 
 const adminLinks = [
   { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
+  { label: "Manage Properties", path: "/admin/listings", icon: Home },
+  { label: "Manage Areas", path: "/admin/areas", icon: Layers },
   { label: "Add Property", path: "/admin/add", icon: PlusCircle },
+  { label: "Add Area", path: "/admin/areas/add", icon: MapPin },
   { label: "Settings", path: "/admin/settings", icon: Settings },
 ];
 

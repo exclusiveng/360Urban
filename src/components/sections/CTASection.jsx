@@ -1,68 +1,60 @@
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MessageCircle, ArrowRight } from "lucide-react";
 import Button from "../ui/Button";
-import { generateGeneralWhatsAppLink } from "../../lib/utils";
+import { generateGeneralWhatsAppLink, WHATSAPP_AGENTS } from "../../lib/utils";
 
 export default function CTASection() {
   return (
-    <section className="relative py-20 md:py-24 bg-charcoal overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute inset-0 opacity-[0.03]">
-        <div
-          className="w-full h-full"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4A017' fill-opacity='1'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2l2 3-2 3zm0-7V11l2 3-2 3v-2H0V11h20z'/%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        />
-      </div>
+    <section className="py-20 md:py-28 bg-charcoal relative overflow-hidden">
+      {/* Subtle decorative gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-charcoal via-charcoal to-charcoal-light opacity-100" />
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 rounded-l-full blur-3xl pointer-events-none" />
 
-      {/* Golden accent lines */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-primary/20" />
-      <div className="absolute top-6 left-[10%] right-[10%] h-px bg-primary/8 hidden md:block" />
+      <div className="container-main relative z-10">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <p className="text-primary text-sm font-semibold mb-4">
+              Ready to get started?
+            </p>
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-5 tracking-tight leading-tight">
+              Find your perfect home in Abuja
+            </h2>
+            <p className="text-gray-400 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+              Whether you&apos;re looking to rent, buy, or invest — we&apos;re
+              here to help you find the right property.
+            </p>
 
-      <div className="container-main relative">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center max-w-xl mx-auto"
-        >
-          {/* Decorative dots */}
-          <div className="flex items-center justify-center gap-1.5 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
-          </div>
-
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
-            Ready to Find Your Property?
-          </h2>
-          <p className="text-white/55 mb-9 leading-relaxed">
-            Whether you&apos;re looking to rent, buy, or invest — we&apos;re
-            here to help you find the right property in Abuja. Send us a message
-            and let&apos;s get started.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Button
-              variant="whatsapp"
-              size="lg"
-              href={generateGeneralWhatsAppLink()}
-            >
-              <MessageCircle className="w-5 h-5" />
-              Chat on WhatsApp
-            </Button>
-            <a
-              href="/listings"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-white/50 hover:text-primary no-underline transition-colors"
-            >
-              Or browse listings <ArrowRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </motion.div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              {WHATSAPP_AGENTS.map((agent) => (
+                <Button
+                  key={agent.id}
+                  variant="whatsapp"
+                  size="lg"
+                  href={generateGeneralWhatsAppLink(agent.number)}
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Chat with {agent.name}
+                </Button>
+              ))}
+              <Link to="/listings" className="no-underline">
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="border-white/20 text-white hover:bg-white hover:text-charcoal"
+                >
+                  Browse listings
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

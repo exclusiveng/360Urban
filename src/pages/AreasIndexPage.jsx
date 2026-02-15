@@ -1,29 +1,48 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import SEO from "../components/layout/SEO";
 import AreaCard from "../components/ui/AreaCard";
-import { areas } from "../data/areas";
+import CTASection from "../components/sections/CTASection";
+import { areaService } from "../services/areaService";
 
 export default function AreasIndexPage() {
+  const [areas, setAreas] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAreas = async () => {
+      setLoading(true);
+      const result = await areaService.getAreas();
+      if (result.success) {
+        setAreas(result.data);
+      }
+      setLoading(false);
+    };
+    fetchAreas();
+  }, []);
+
   return (
     <>
       <SEO
         title="Explore Areas in Abuja"
-        description="Browse properties by neighbourhood in Abuja — Jabi, Maitama, Gwarinpa, Katampe, Lugbe, Wuse, and more."
+        description="Browse popular neighbourhoods in Abuja. Find the area that suits your lifestyle and budget."
       />
 
       {/* Header */}
-      <section className="bg-charcoal">
-        <div className="container-main py-12 md:py-16">
+      <section className="bg-gradient-to-b from-gray-light to-white pt-28 pb-12">
+        <div className="container-main">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.5 }}
           >
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-              Explore Areas in Abuja
+            <p className="text-primary text-sm font-semibold mb-3">
+              Neighbourhoods
+            </p>
+            <h1 className="text-4xl md:text-5xl font-bold text-charcoal tracking-tight mb-4">
+              Explore Abuja
             </h1>
-            <p className="text-white/60 max-w-2xl">
+            <p className="text-gray-500 text-lg max-w-xl leading-relaxed">
               Each neighbourhood in Abuja has its own character. Find the area
               that suits your lifestyle and budget.
             </p>
@@ -32,15 +51,23 @@ export default function AreasIndexPage() {
       </section>
 
       {/* Areas Grid */}
-      <section className="py-10 md:py-16 bg-gray-light">
+      <section className="py-10 bg-white">
         <div className="container-main">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-            {areas.map((area, i) => (
-              <AreaCard key={area.slug} area={area} index={i} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex items-center justify-center min-h-[400px]">
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {areas.map((area, i) => (
+                <AreaCard key={area.slug} area={area} index={i} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
+
+      <CTASection />
     </>
   );
 }

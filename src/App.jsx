@@ -8,7 +8,14 @@ import ListingsPage from "./pages/ListingsPage";
 import PropertyPage from "./pages/PropertyPage";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import ManagePropertiesPage from "./pages/admin/ManagePropertiesPage";
 import AddPropertyPage from "./pages/admin/AddPropertyPage";
+import AddAreaPage from "./pages/admin/AddAreaPage";
+import ManageAreasPage from "./pages/admin/ManageAreasPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function NotFound() {
   return (
@@ -36,34 +43,53 @@ function PublicLayout() {
 export default function App() {
   return (
     <HelmetProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Website Routes */}
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/areas" element={<AreasIndexPage />} />
-            <Route path="/areas/:areaSlug" element={<AreaPage />} />
-            <Route path="/listings" element={<ListingsPage />} />
-            <Route path="/property/:slug" element={<PropertyPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Website Routes */}
+            <Route element={<PublicLayout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/areas" element={<AreasIndexPage />} />
+              <Route path="/areas/:areaSlug" element={<AreaPage />} />
+              <Route path="/listings" element={<ListingsPage />} />
+              <Route path="/property/:slug" element={<PropertyPage />} />
+            </Route>
 
-          {/* Admin Dashboard Routes */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="add" element={<AddPropertyPage />} />
-            {/* Placeholder for settings */}
+            {/* Auth Routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+
+            {/* Admin Dashboard Routes (Protected) */}
             <Route
-              path="settings"
+              path="/admin"
               element={
-                <div className="text-center py-20 text-gray-text">
-                  Settings coming soon
-                </div>
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
               }
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="listings" element={<ManagePropertiesPage />} />
+              <Route path="areas" element={<ManageAreasPage />} />
+              <Route path="add" element={<AddPropertyPage />} />
+              <Route path="edit/:id" element={<AddPropertyPage />} />
+              <Route path="areas/add" element={<AddAreaPage />} />
+              <Route path="areas/edit/:id" element={<AddAreaPage />} />
+              <Route
+                path="settings"
+                element={
+                  <div className="text-center py-20 text-gray-text">
+                    Settings coming soon
+                  </div>
+                }
+              />
+            </Route>
+
+            {/* 404 Page */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </HelmetProvider>
   );
 }

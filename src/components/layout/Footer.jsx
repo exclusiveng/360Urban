@@ -21,36 +21,42 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-charcoal text-white" role="contentinfo">
-      <div className="container-main pt-16 pb-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+    <footer
+      className="bg-gray-light border-t border-gray-200/60 text-charcoal"
+      role="contentinfo"
+    >
+      <div className="container-main pt-16 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-10">
           {/* Brand */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2 no-underline mb-4">
-              <div className="flex items-center justify-center w-8 h-8 bg-primary rounded-lg">
+          <div className="lg:col-span-1">
+            <Link
+              to="/"
+              className="flex items-center gap-2.5 no-underline mb-5 group"
+            >
+              <div className="flex items-center justify-center w-8 h-8 bg-primary rounded-lg transition-all duration-300 group-hover:scale-105">
                 <MapPin className="w-4 h-4 text-white" strokeWidth={2.5} />
               </div>
-              <span className="text-lg font-bold text-white">
+              <span className="text-xl font-bold text-charcoal tracking-tight">
                 360<span className="text-primary">Urban</span>
               </span>
             </Link>
-            <p className="text-gray-text text-sm leading-relaxed max-w-xs">
+            <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
               Abuja&apos;s trusted platform for verified property listings. No
-              hidden fees, no agent stress — just real properties.
+              hidden fees, just real properties.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold text-primary uppercase tracking-wider mb-4">
-              Quick Links
+            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-5">
+              Explore
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="flex flex-col gap-3">
               {quickLinks.map((link) => (
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-sm text-gray-mid hover:text-primary no-underline transition-colors"
+                    className="text-sm font-medium text-gray-600 hover:text-charcoal no-underline transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -61,15 +67,15 @@ export default function Footer() {
 
           {/* More Areas */}
           <div>
-            <h4 className="text-sm font-semibold text-primary uppercase tracking-wider mb-4">
-              More Areas
+            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-5">
+              Local Areas
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="flex flex-col gap-3">
               {areaLinks.map((link) => (
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-sm text-gray-mid hover:text-primary no-underline transition-colors"
+                    className="text-sm font-medium text-gray-600 hover:text-charcoal no-underline transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -80,37 +86,33 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-sm font-semibold text-primary uppercase tracking-wider mb-4">
+            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-5">
               Contact
             </h4>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-2.5 text-sm text-gray-mid">
-                <Phone className="w-4 h-4 text-primary shrink-0" />
+            <ul className="flex flex-col gap-4">
+              <li className="flex items-center gap-3 text-sm text-gray-600">
+                <Phone className="w-4 h-4 text-gray-400" />
                 <span>+234 800 000 0000</span>
               </li>
-              <li className="flex items-center gap-2.5 text-sm text-gray-mid">
-                <Mail className="w-4 h-4 text-primary shrink-0" />
+              <li className="flex items-center gap-3 text-sm text-gray-600">
+                <Mail className="w-4 h-4 text-gray-400" />
                 <span>hello@360urban.ng</span>
-              </li>
-              <li className="flex items-start gap-2.5 text-sm text-gray-mid">
-                <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <span>Abuja, FCT, Nigeria</span>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between mt-12 pt-6 border-t border-charcoal-light gap-4">
-          <p className="text-xs text-gray-text">
+        <div className="flex flex-col sm:flex-row items-center justify-between mt-12 pt-8 border-t border-gray-200/60 gap-4">
+          <p className="text-xs text-gray-400">
             © {new Date().getFullYear()} 360Urban. All rights reserved.
           </p>
           <button
             onClick={scrollToTop}
-            className="flex items-center gap-1.5 text-xs text-gray-text hover:text-primary transition-colors cursor-pointer"
+            className="group flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-charcoal transition-all cursor-pointer"
             aria-label="Back to top"
           >
-            <ArrowUp className="w-3.5 h-3.5" />
+            <ArrowUp className="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5" />
             Back to top
           </button>
         </div>

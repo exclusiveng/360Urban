@@ -6,21 +6,20 @@ export default function StatusBadge({ status }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-md uppercase tracking-wide backdrop-blur-sm",
+        "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg backdrop-blur-md",
         isAvailable
-          ? "bg-success/15 text-success border border-success/20"
-          : "bg-error/15 text-error border border-error/20",
+          ? "bg-emerald-500/15 text-emerald-600 border border-emerald-500/20"
+          : "bg-red-500/15 text-red-500 border border-red-500/20",
       )}
     >
-      <span className="relative flex items-center justify-center w-2 h-2">
-        {/* Pulse ring for available */}
+      <span className="relative flex items-center justify-center w-1.5 h-1.5">
         {isAvailable && (
-          <span className="absolute w-full h-full rounded-full bg-success animate-pulse-dot" />
+          <span className="absolute w-full h-full rounded-full bg-emerald-400 animate-pulse-dot" />
         )}
         <span
           className={cn(
             "relative w-1.5 h-1.5 rounded-full",
-            isAvailable ? "bg-success" : "bg-error",
+            isAvailable ? "bg-emerald-500" : "bg-red-500",
           )}
         />
       </span>

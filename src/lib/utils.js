@@ -1,4 +1,7 @@
-const WHATSAPP_NUMBER = '2348000000000'; // Replace with actual WhatsApp number
+export const WHATSAPP_AGENTS = [
+  { id: 1, number: '2347044423621', name: 'Agent 1' },
+  { id: 2, number: '2349056539548', name: 'Agent 2' },
+];
 
 export function formatPrice(amount) {
   return new Intl.NumberFormat('en-NG', {
@@ -9,18 +12,19 @@ export function formatPrice(amount) {
   }).format(amount);
 }
 
-export function generateWhatsAppLink(propertyTitle, area) {
+export function generateWhatsAppLink(propertyTitle, area, agentNumber = WHATSAPP_AGENTS[0].number) {
+  const areaName = typeof area === 'object' ? area?.name : area;
   const message = encodeURIComponent(
-    `Hello, I'm interested in ${propertyTitle} in ${area} listed on 360Urban.`
+    `Hello, I'm interested in ${propertyTitle} in ${areaName} listed on 360Urban.`
   );
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+  return `https://wa.me/${agentNumber}?text=${message}`;
 }
 
-export function generateGeneralWhatsAppLink() {
+export function generateGeneralWhatsAppLink(agentNumber = WHATSAPP_AGENTS[0].number) {
   const message = encodeURIComponent(
     `Hello, I found your listing on 360Urban and I'd like to make an inquiry.`
   );
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+  return `https://wa.me/${agentNumber}?text=${message}`;
 }
 
 export function filterProperties(properties, filters = {}) {
