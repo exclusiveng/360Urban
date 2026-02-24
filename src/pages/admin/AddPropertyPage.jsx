@@ -154,10 +154,22 @@ export default function AddPropertyPage() {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
-    // Create preview URLs
-    const newPreviews = files.map((file) => URL.createObjectURL(file));
+    // Filter by size (2MB)
+    const validFiles = files.filter((file) => file.size <= 2 * 1024 * 1024);
+    const oversizedFiles = files.filter((file) => file.size > 2 * 1024 * 1024);
 
-    setImageFiles((prev) => [...prev, ...files]);
+    if (oversizedFiles.length > 0) {
+      setError(
+        `Some files were skipped because they exceed the 2MB limit: ${oversizedFiles.map((f) => f.name).join(", ")}`,
+      );
+    }
+
+    if (validFiles.length === 0) return;
+
+    // Create preview URLs
+    const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
+
+    setImageFiles((prev) => [...prev, ...validFiles]);
     setPreviews((prev) => [...prev, ...newPreviews]);
   };
 
@@ -651,7 +663,7 @@ export default function AddPropertyPage() {
                     Click to upload images
                   </p>
                   <p className="text-xs text-gray-400">
-                    SVG, PNG, JPG or GIF (max 5MB each)
+                    SVG, PNG, JPG or GIF (max 2MB each)
                   </p>
                 </div>
               </label>

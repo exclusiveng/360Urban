@@ -25,15 +25,18 @@ export default function AddAreaPage() {
     description: "",
   });
 
-  const [imageFile, setImageFile] = useState(null);
-  const [preview, setPreview] = useState(null);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [previews, setPreviews] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
 
-  // Cleanup object URL
+  // Cleanup object URLs
   useEffect(() => {
     return () => {
-      if (preview && !preview.startsWith("http")) URL.revokeObjectURL(preview);
+      previews.forEach((url) => {
+        if (!url.startsWith("http")) URL.revokeObjectURL(url);
+      });
     };
-  }, [preview]);
+  }, [previews]);
 
   // Fetch area data if in edit mode
   useEffect(() => {
@@ -49,8 +52,10 @@ export default function AddAreaPage() {
             name: area.name || "",
             description: area.description || "",
           });
-          if (area.image) {
-            setPreview(area.image);
+          if (area.image || area.images) {
+            const initialImages =
+              area.images || (area.image ? [area.image] : []);
+            setExistingImages(initialImages);
           }
         } else {
           setError(response.error || "Failed to fetch area details");
@@ -75,16 +80,36 @@ export default function AddAreaPage() {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
 
-    setImageFile(file);
-    setPreview(URL.createObjectURL(file));
+    // Filter by size (2MB)
+    const validFiles = files.filter((file) => file.size <= 2 * 1024 * 1024);
+    const oversizedFiles = files.filter((file) => file.size > 2 * 1024 * 1024);
+
+    if (oversizedFiles.length > 0) {
+      setError(
+        `Some files were skipped because they exceed the 2MB limit: ${oversizedFiles.map((f) => f.name).join(", ")}`,
+      );
+    }
+
+    if (validFiles.length === 0) return;
+
+    const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
+    setImageFiles((prev) => [...prev, ...validFiles]);
+    setPreviews((prev) => [...prev, ...newPreviews]);
   };
 
-  const removeImage = () => {
-    setImageFile(null);
-    setPreview(null);
+  const removeNewImage = (index) => {
+    setImageFiles((prev) => prev.filter((_, i) => i !== index));
+    setPreviews((prev) => {
+      URL.revokeObjectURL(prev[index]);
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const removeExistingImage = (index) => {
+    setExistingImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -104,13 +129,16 @@ export default function AddAreaPage() {
       data.append("name", formData.name);
       data.append("description", formData.description);
 
-      if (imageFile) {
-        data.append("image", imageFile);
-      } else if (isEditMode && preview) {
-        // If in edit mode and we have a preview (URL) but no new file,
-        // we might want to tell the backend to keep it.
-        // In our backend, if no file is sent, and 'image' is in body, it uses that.
-        data.append("image", preview);
+      if (imageFiles.length > 0) {
+        imageFiles.forEach((file) => {
+          data.append("images", file);
+        });
+      }
+
+      if (isEditMode && existingImages.length > 0) {
+        existingImages.forEach((img) => {
+          data.append("existingImages", img);
+        });
       }
 
       const response = isEditMode
@@ -125,8 +153,9 @@ export default function AddAreaPage() {
             name: "",
             description: "",
           });
-          setImageFile(null);
-          setPreview(null);
+          setImageFiles([]);
+          setPreviews([]);
+          setExistingImages([]);
         }
         // Redirect to dashboard after 2 seconds
         setTimeout(() => navigate("/admin"), 2000);
@@ -235,47 +264,82 @@ export default function AddAreaPage() {
             {/* Image Upload */}
             <div>
               <label className="block text-sm font-medium text-charcoal mb-1.5">
-                Area Image
+                Area Images
               </label>
 
-              {!preview ? (
-                <label className="block w-full h-48 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center justify-center gap-2 group">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  <div className="p-3 rounded-full bg-gray-50 group-hover:bg-white transition-colors">
-                    <UploadCloud className="w-6 h-6 text-gray-400 group-hover:text-primary transition-colors" />
+              {/* Existing Images */}
+              {existingImages.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-xs font-medium text-gray-500 mb-2">
+                    Existing Images
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {existingImages.map((img, i) => (
+                      <div
+                        key={i}
+                        className="relative h-32 rounded-lg overflow-hidden border border-gray-200 group"
+                      >
+                        <img
+                          src={img}
+                          alt=""
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeExistingImage(i)}
+                          className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center text-error opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm font-medium text-charcoal">
-                      Click to upload cover image
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      SVG, PNG, JPG or GIF (max 5MB)
-                    </p>
-                  </div>
-                </label>
-              ) : (
-                <div className="relative h-64 rounded-xl overflow-hidden border border-gray-200 group">
-                  <img
-                    src={preview}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-error hover:bg-error hover:text-white transition-colors opacity-0 group-hover:opacity-100"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                  <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                    {imageFile?.name}
-                  </div>
+                </div>
+              )}
+
+              <label className="block w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center justify-center gap-2 group">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                <div className="p-3 rounded-full bg-gray-50 group-hover:bg-white transition-colors">
+                  <UploadCloud className="w-6 h-6 text-gray-400 group-hover:text-primary transition-colors" />
+                </div>
+                <div className="text-center">
+                  <p className="text-sm font-medium text-charcoal">
+                    Click to upload images
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Max 5 images, SVG, PNG, JPG or GIF (max 2MB each)
+                  </p>
+                </div>
+              </label>
+
+              {/* New Previews */}
+              {previews.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
+                  {previews.map((url, i) => (
+                    <div
+                      key={url}
+                      className="relative h-32 rounded-lg overflow-hidden border border-gray-200 group"
+                    >
+                      <img
+                        src={url}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeNewImage(i)}
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center text-error opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import api from '../services/api';
+import { createContext, useContext, useState, useEffect } from "react";
+import api from "../services/api";
 
 const AuthContext = createContext();
 
@@ -10,22 +10,22 @@ export const AuthProvider = ({ children }) => {
 
   // Initialize auth state from localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
       } catch (err) {
-        console.error('Failed to parse user:', err);
-        localStorage.removeItem('user');
+        console.error("Failed to parse user:", err);
+        localStorage.removeItem("user");
       }
     }
     setLoading(false);
   }, []);
 
-  const register = async (email, password, firstName, lastName, phone) => {
+  const register = async ({ email, password, firstName, lastName, phone }) => {
     try {
       setError(null);
-      const response = await api.post('/auth/register', {
+      const response = await api.post("/auth/register", {
         email,
         password,
         firstName,
@@ -35,14 +35,14 @@ export const AuthProvider = ({ children }) => {
 
       const { accessToken, refreshToken, user: userData } = response.data.data;
 
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("user", JSON.stringify(userData));
 
       setUser(userData);
       return { success: true, data: response.data.data };
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Registration failed';
+      const errorMessage = err.response?.data?.message || "Registration failed";
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }
@@ -51,21 +51,21 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setError(null);
-      const response = await api.post('/auth/login', {
+      const response = await api.post("/auth/login", {
         email,
         password,
       });
 
       const { accessToken, refreshToken, user: userData } = response.data.data;
 
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("user", JSON.stringify(userData));
 
       setUser(userData);
       return { success: true, data: response.data.data };
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Login failed';
+      const errorMessage = err.response?.data?.message || "Login failed";
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }
@@ -73,13 +73,13 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await api.post('/auth/logout');
+      await api.post("/auth/logout");
     } catch (err) {
-      console.error('Logout error:', err);
+      console.error("Logout error:", err);
     } finally {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
       setUser(null);
     }
   };
@@ -87,13 +87,14 @@ export const AuthProvider = ({ children }) => {
   const changePassword = async (oldPassword, newPassword) => {
     try {
       setError(null);
-      await api.post('/auth/change-password', {
+      await api.post("/auth/change-password", {
         oldPassword,
         newPassword,
       });
       return { success: true };
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Failed to change password';
+      const errorMessage =
+        err.response?.data?.message || "Failed to change password";
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }
@@ -122,7 +123,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 };
