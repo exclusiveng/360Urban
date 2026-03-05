@@ -80,24 +80,23 @@ export default function AddAreaPage() {
   };
 
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length === 0) return;
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    // Filter by size (2MB)
-    const validFiles = files.filter((file) => file.size <= 2 * 1024 * 1024);
-    const oversizedFiles = files.filter((file) => file.size > 2 * 1024 * 1024);
-
-    if (oversizedFiles.length > 0) {
-      setError(
-        `Some files were skipped because they exceed the 2MB limit: ${oversizedFiles.map((f) => f.name).join(", ")}`,
-      );
+    if (file.size > 2 * 1024 * 1024) {
+      setError(`File is too large. Max size is 2MB.`);
+      return;
     }
 
-    if (validFiles.length === 0) return;
+    // Cleanup old previews if any
+    previews.forEach((url) => {
+      if (!url.startsWith("http")) URL.revokeObjectURL(url);
+    });
 
-    const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
-    setImageFiles((prev) => [...prev, ...validFiles]);
-    setPreviews((prev) => [...prev, ...newPreviews]);
+    const preview = URL.createObjectURL(file);
+    setImageFiles([file]);
+    setPreviews([preview]);
+    setExistingImages([]); // Clear existing image when a new one is selected
   };
 
   const removeNewImage = (index) => {
@@ -130,15 +129,11 @@ export default function AddAreaPage() {
       data.append("description", formData.description);
 
       if (imageFiles.length > 0) {
-        imageFiles.forEach((file) => {
-          data.append("images", file);
-        });
-      }
-
-      if (isEditMode && existingImages.length > 0) {
-        existingImages.forEach((img) => {
-          data.append("existingImages", img);
-        });
+        // Backend expects 'image' (singular) for areas
+        data.append("image", imageFiles[0]);
+      } else if (isEditMode && existingImages.length > 0) {
+        // If no new image, send the first existing image URL
+        data.append("image", existingImages[0]);
       }
 
       const response = isEditMode
@@ -264,7 +259,7 @@ export default function AddAreaPage() {
             {/* Image Upload */}
             <div>
               <label className="block text-sm font-medium text-charcoal mb-1.5">
-                Area Images
+                Area Image
               </label>
 
               {/* Existing Images */}
@@ -300,7 +295,6 @@ export default function AddAreaPage() {
               <label className="block w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center justify-center gap-2 group">
                 <input
                   type="file"
-                  multiple
                   accept="image/*"
                   onChange={handleFileChange}
                   className="hidden"
@@ -310,10 +304,13 @@ export default function AddAreaPage() {
                 </div>
                 <div className="text-center">
                   <p className="text-sm font-medium text-charcoal">
-                    Click to upload images
+                    Click to upload{" "}
+                    {previews.length > 0 || existingImages.length > 0
+                      ? "a new image"
+                      : "an image"}
                   </p>
                   <p className="text-xs text-gray-400">
-                    Max 5 images, SVG, PNG, JPG or GIF (max 2MB each)
+                    SVG, PNG, JPG or GIF (max 2MB)
                   </p>
                 </div>
               </label>

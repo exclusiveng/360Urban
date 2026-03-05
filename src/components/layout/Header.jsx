@@ -49,7 +49,7 @@ export default function Header() {
 
         {/* Desktop Nav */}
         <nav
-          className="hidden lg:flex items-center gap-3"
+          className="hidden lg:flex items-center gap-3 ml-auto mr-8"
           aria-label="Main navigation"
         >
           {navLinks.map((link) => (
@@ -69,7 +69,7 @@ export default function Header() {
 
         {/* Auth Buttons / User Menu */}
         <div className="hidden md:flex items-center gap-4">
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -125,27 +125,12 @@ export default function Header() {
                 )}
               </AnimatePresence>
             </div>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="inline-flex items-center justify-center !px-8 !py-3.5 text-charcoal font-bold text-sm no-underline hover:bg-gray-50 rounded-full transition-all min-w-[100px]"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/register"
-                className="inline-flex items-center justify-center !px-10 !py-3.5 bg-primary text-white rounded-full font-bold text-sm no-underline hover:bg-primary-dark shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-300 min-w-[140px]"
-              >
-                Get Started
-              </Link>
-            </>
           )}
         </div>
 
         {/* Mobile menu button */}
-        <div className="flex items-center gap-2 md:hidden">
-          {isAuthenticated ? (
+        <div className="flex items-center gap-2 md:hidden ml-auto">
+          {isAuthenticated && (
             <button
               onClick={async () => {
                 await logout();
@@ -156,13 +141,6 @@ export default function Header() {
             >
               <LogOut className="w-5 h-5" />
             </button>
-          ) : (
-            <Link
-              to="/login"
-              className="px-3 py-1.5 text-xs bg-primary text-white rounded-lg font-medium no-underline"
-            >
-              Sign In
-            </Link>
           )}
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -221,24 +199,6 @@ export default function Header() {
                   </Link>
                 </motion.div>
               ))}
-              {!isAuthenticated && (
-                <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-gray-100">
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex justify-center !py-3 !px-4 rounded-xl text-sm font-bold text-charcoal border border-gray-200 no-underline"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex justify-center !py-3 !px-4 rounded-xl text-sm font-bold text-white bg-primary no-underline shadow-md shadow-primary/20"
-                  >
-                    Get Started
-                  </Link>
-                </div>
-              )}
             </div>
           </motion.nav>
         )}

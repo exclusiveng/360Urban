@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { MapPin, ArrowRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import SEO from "../components/layout/SEO";
@@ -67,12 +66,7 @@ export default function LoginPage() {
 
         {/* Right side — form */}
         <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-12 pt-24 lg:pt-12">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="w-full max-w-md"
-          >
+          <div className="w-full max-w-md">
             {/* Mobile logo */}
             <div className="lg:hidden mb-8">
               <Link to="/" className="flex items-center gap-2.5 no-underline">
@@ -133,20 +127,7 @@ export default function LoginPage() {
                 {isLoading ? "Signing in..." : "Sign In"}
               </button>
             </form>
-
-            <div className="mt-8 text-center">
-              <p className="text-gray-500 text-sm">
-                Don&apos;t have an account?{" "}
-                <Link
-                  to="/register"
-                  className="text-primary font-semibold hover:text-primary-dark transition-colors inline-flex items-center gap-1"
-                >
-                  Create one
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </p>
-            </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </>

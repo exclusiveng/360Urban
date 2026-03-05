@@ -16,6 +16,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { HIDDEN_LOGIN_PATH } from "./lib/constants";
 
 function NotFound() {
   return (
@@ -55,9 +56,8 @@ export default function App() {
               <Route path="/property/:slug" element={<PropertyPage />} />
             </Route>
 
-            {/* Auth Routes */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+            {/* Auth Routes Hidden */}
+            <Route path={HIDDEN_LOGIN_PATH} element={<LoginPage />} />
 
             {/* Admin Dashboard Routes (Protected) */}
             <Route

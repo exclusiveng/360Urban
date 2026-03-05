@@ -1,5 +1,6 @@
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { HIDDEN_LOGIN_PATH } from "../lib/constants";
 
 export const ProtectedRoute = ({ children, requiredRole = null }) => {
   const { isAuthenticated, user, loading } = useAuth();
@@ -13,7 +14,7 @@ export const ProtectedRoute = ({ children, requiredRole = null }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={HIDDEN_LOGIN_PATH} replace />;
   }
 
   if (requiredRole && user?.role !== requiredRole) {

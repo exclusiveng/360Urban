@@ -92,11 +92,15 @@ export default function Footer() {
             <ul className="flex flex-col gap-4">
               <li className="flex items-center gap-3 text-sm text-gray-600">
                 <Phone className="w-4 h-4 text-gray-400" />
-                <span>+234 800 000 0000</span>
+                <span>+234 7044 423 621</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm text-gray-600">
+                <Phone className="w-4 h-4 text-gray-400" />
+                <span>+234 9056 539 548</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-gray-600">
                 <Mail className="w-4 h-4 text-gray-400" />
-                <span>hello@360urban.ng</span>
+                <span>info@360urban.org</span>
               </li>
             </ul>
           </div>

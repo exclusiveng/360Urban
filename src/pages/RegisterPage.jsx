@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { HIDDEN_LOGIN_PATH } from "../lib/constants";
 import { MapPin, ArrowRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import SEO from "../components/layout/SEO";
@@ -279,7 +279,7 @@ export default function RegisterPage() {
               <p className="text-gray-500 text-sm">
                 Already have an account?{" "}
                 <Link
-                  to="/login"
+                  to={HIDDEN_LOGIN_PATH}
                   className="text-primary font-semibold hover:text-primary-dark transition-colors inline-flex items-center gap-1"
                 >
                   Sign in
