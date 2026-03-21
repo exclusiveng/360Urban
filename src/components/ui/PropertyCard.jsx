@@ -66,7 +66,7 @@ export default function PropertyCard({
         className="group block bg-white rounded-2xl overflow-hidden no-underline card-hover border border-gray-100/80 cursor-pointer"
       >
         {/* Image */}
-        <div className="relative aspect-[4/3] overflow-hidden">
+        <div className="relative aspect-video overflow-hidden">
           {!imgLoaded && <div className="absolute inset-0 img-skeleton" />}
           <img
             src={property.images?.[0]?.url || property.images?.[0]}

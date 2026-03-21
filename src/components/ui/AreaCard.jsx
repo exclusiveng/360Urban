@@ -24,7 +24,7 @@ export default function AreaCard({
     >
       <div
         onClick={() => navigate(`/areas/${area.slug}`)}
-        className="group block relative overflow-hidden rounded-2xl aspect-[3/4] no-underline cursor-pointer"
+        className="group block relative overflow-hidden rounded-2xl aspect-video no-underline cursor-pointer"
       >
         {/* Background Image */}
         <div className="absolute inset-0 bg-charcoal">
